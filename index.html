@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Smart Calculator</title>
+
+<style>
+body {
+    margin: 0;
+    background: radial-gradient(circle, #0f2027, #203a43, #2c5364);
+    font-family: Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.calculator {
+    background: rgba(0,0,0,0.65);
+    padding: 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 25px cyan, 0 0 50px blue;
+    width: 340px;
+    max-width: 90%;
+    text-align: center;
+}
+
+.logo {
+    width: 100%;
+    max-width: 260px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px cyan;
+}
+
+h2 {
+    font-size: 15px;
+    margin: 5px 0 10px;
+    color: cyan;
+    text-shadow: 0 0 10px cyan, 0 0 20px blue;
+}
+
+#display {
+    width: 100%;
+    height: 55px;
+    font-size: 22px;
+    text-align: right;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: black;
+    color: lime;
+    box-shadow: inset 0 0 10px lime;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.num {
+    background: #111;
+    color: cyan;
+    box-shadow: 0 0 10px cyan;
+}
+.op {
+    background: #111;
+    color: orange;
+    box-shadow: 0 0 10px orange;
+}
+.equal {
+    background: #111;
+    color: lime;
+    box-shadow: 0 0 10px lime;
+}
+.clear {
+    background: #111;
+    color: red;
+    box-shadow: 0 0 10px red;
+}
+
+button:active {
+    transform: scale(0.9);
+    box-shadow: 0 0 20px white;
+}
+
+#penjelasan {
+    margin-top: 10px;
+    color: #00ffcc;
+    font-size: 12px;
+    text-shadow: 0 0 5px cyan;
+}
+
+@media (max-width: 500px) {
+    .calculator {
+        width: 95%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+    <!-- LOGO -->
+    <img src="logo.png" class="logo">
+
+    <h2>🤖 AI Smart Calculator</h2>
+
+    <input type="text" id="display">
+
+    <div class="buttons">
+        <button class="num" onclick="klik('7')">7</button>
+        <button class="num" onclick="klik('8')">8</button>
+        <button class="num" onclick="klik('9')">9</button>
+        <button class="op" onclick="klik('/')">÷</button>
+
+        <button class="num" onclick="klik('4')">4</button>
+        <button class="num" onclick="klik('5')">5</button>
+        <button class="num" onclick="klik('6')">6</button>
+        <button class="op" onclick="klik('*')">×</button>
+
+        <button class="num" onclick="klik('1')">1</button>
+        <button class="num" onclick="klik('2')">2</button>
+        <button class="num" onclick="klik('3')">3</button>
+        <button class="op" onclick="klik('-')">-</button>
+
+        <button class="num" onclick="klik('0')">0</button>
+        <button class="num" onclick="klik('.')">.</button>
+        <button class="equal" onclick="hitung()">=</button>
+        <button class="op" onclick="klik('+')">+</button>
+    </div>
+
+    <button class="clear" onclick="hapus()" style="width:100%; margin-top:10px;">C</button>
+
+    <div id="penjelasan"></div>
+</div>
+
+<script>
+/* 🔊 SUARA FUTURISTIK TANPA FILE */
+function bunyi() {
+    let ctx = new (window.AudioContext || window.webkitAudioContext)();
+    let oscillator = ctx.createOscillator();
+    let gain = ctx.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.frequency.value = 800;
+    oscillator.type = "square";
+
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.05);
+}
+
+function klik(val) {
+    bunyi();
+    document.getElementById("display").value += val;
+}
+
+function hapus() {
+    bunyi();
+    document.getElementById("display").value = "";
+    document.getElementById("penjelasan").innerText = "";
+}
+
+function hitung() {
+    bunyi();
+    let ekspresi = document.getElementById("display").value;
+
+    try {
+        let hasil = eval(ekspresi);
+        document.getElementById("display").value = hasil;
+
+        let penjelasan = "";
+
+        if (ekspresi.includes("+")) {
+            penjelasan = "Penjumlahan";
+        } else if (ekspresi.includes("-")) {
+            penjelasan = "Pengurangan";
+        } else if (ekspresi.includes("*")) {
+            penjelasan = "Perkalian";
+        } else if (ekspresi.includes("/")) {
+            penjelasan = "Pembagian";
+        }
+
+        document.getElementById("penjelasan").innerText =
+            ekspresi + " = " + hasil + " | " + penjelasan;
+
+    } catch {
+        document.getElementById("display").value = "Error";
+        document.getElementById("penjelasan").innerText = "Input salah!";
+    }
+}
+</script>
+
+</body>
+</html>
